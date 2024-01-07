@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Cards</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2b2b2b;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .player-card {
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px;
+            width: 300px;
+            background: linear-gradient(45deg, #4e54c8, #8f94fb);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .player-card:hover {
+            transform: scale(1.05);
+        }
+
+        .player-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .player-info {
+            padding: 20px;
+        }
+
+        h2, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    // Function to load JSON data from file
+    function loadJSON(callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', 'playersData.json', true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                callback(xobj.responseText);
+            }
+        };
+        xobj.send(null);
+    }
+
+    // Function to display player cards
+    function displayPlayers(data) {
+        var players = JSON.parse(data).items;
+
+        players.forEach(function (player) {
+            var playerCard = document.createElement('div');
+            playerCard.className = 'player-card';
+
+            var playerImage = document.createElement('img');
+            playerImage.src = player.avatarUrl;
+            playerImage.alt = 'Player Image';
+            playerImage.className = 'player-image';
+
+            var playerInfo = document.createElement('div');
+            playerInfo.className = 'player-info';
+
+            var playerName = document.createElement('h2');
+            playerName.textContent = player.firstName + ' ' + player.lastName;
+
+            var overallRating = document.createElement('p');
+            overallRating.innerHTML = '<strong>Overall Rating:</strong> ' + player.overallRating;
+
+            var position = document.createElement('p');
+            position.innerHTML = '<strong>Position:</strong> ' + player.position.label;
+
+            var team = document.createElement('p');
+            team.innerHTML = '<strong>Team:</strong> ' + player.team.label;
+
+            var nationality = document.createElement('p');
+            nationality.innerHTML = '<strong>Nationality:</strong> ' + player.nationality.label;
+
+            // Add more player information as needed
+
+            playerInfo.appendChild(playerName);
+            playerInfo.appendChild(overallRating);
+            playerInfo.appendChild(position);
+            playerInfo.appendChild(team);
+            playerInfo.appendChild(nationality);
+
+            // Add more player information as needed
+
+            playerCard.appendChild(playerImage);
+            playerCard.appendChild(playerInfo);
+
+            document.body.appendChild(playerCard);
+        });
+    }
+
+    // Load data and display players
+    loadJSON(displayPlayers);
+</script>
+
+</body>
+</html>
